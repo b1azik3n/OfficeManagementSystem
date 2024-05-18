@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Enum
 {
-    
-        public enum Status
-        {
-            Started,
-            Running,
-            UAT,
-            Closed
-
-        }
-    
+    public enum EmployeeStatus
+    {
+        Active,
+        InActive
+    }
 }

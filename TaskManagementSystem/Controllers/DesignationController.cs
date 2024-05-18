@@ -8,11 +8,11 @@ namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DesignationController : ControllerBase
+    public class DesignationController : BaseController
     {
         private readonly IService service;
 
-        public DesignationController(IService service)
+        public DesignationController(IService service, IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
             this.service = service;
         }
@@ -20,21 +20,32 @@ namespace TaskManagementSystem.Controllers
         [Route("{id}")]
         public IActionResult GetParticular(Guid id)
         {
-           var des= service.GetByID<Designation,DesignationRequest>(id);
+            var des = service.GetByID<Designation, DesignationRequest>(id);
             return Ok(des);
         }
         [HttpGet]
         public IActionResult GetAllRoles()
-        { 
-            var roles=service.GetAll<Designation,DesignationRequest>();
+        {
+            var roles = service.GetAll<Designation, DesignationRequest>();
             return Ok(roles);
-        
+
         }
         [HttpPost]
         public IActionResult Create([FromBody] DesignationRequest designation)
         {
-            service.AddNew<Designation, DesignationRequest>(designation);
+            var Id = GetUserId();
+
+            service.AddNew<Designation, DesignationRequest>(designation, Id);
             return Ok("Created!");
+
+        }
+        [HttpPut]
+        public IActionResult Update([FromBody] DesignationRequest task, Guid DesID)
+        {
+
+            service.Edit<Designation, DesignationRequest>(task, DesID, GetUserId());
+            var updated = service.GetByID<Designation, DesignationRequest>(DesID);
+            return Ok(new { message = "Updated", updated });
 
         }
     }

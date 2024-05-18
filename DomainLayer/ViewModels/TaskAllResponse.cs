@@ -10,6 +10,6 @@ namespace DomainLayer.ViewModels
     public class TaskAllResponse
     {
         public string Name { get; set; }
-        public Status Status { get; set; }
+        public Enum.TaskStatus Status { get; set; }
     }
 }

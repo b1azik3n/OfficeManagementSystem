@@ -5,7 +5,7 @@ namespace TaskManagementSystem.Services.Tasks
 {
     public interface ITaskService: IService
     {
-         bool AssignTask(TaskUserRequest taskProjectVM);
+         bool AssignTask(TaskUserRequest taskProjectVM,Guid Id);
 
 
         void CreateTask(TaskRequest taskVM);

@@ -7,11 +7,11 @@ namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class TaskController : BaseController
     {
         private readonly ITaskService service;
 
-        public TaskController(ITaskService service)
+        public TaskController(ITaskService service, IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
             this.service = service;
         }
@@ -19,7 +19,7 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult CreateTask([FromBody] TaskRequest task)
         {
-            service.CreateTask(task);
+            service.AddNew<TaskModel,TaskRequest>(task,GetUserId());
             return Ok("added");
 
         }
@@ -43,8 +43,8 @@ namespace TaskManagementSystem.Controllers
 
         public IActionResult EditTask([FromBody] TaskRequest task, Guid id)
         {
-                service.Edit<TaskModel,TaskRequest>(task,id);
-                var updated=service.GetByID<TaskModel,TaskRequest> (id);
+                service.Edit<TaskModel,TaskRequest>(task,id, GetUserId());
+                var updated=service.GetByID<TaskModel,TaskResponse> (id);
                 return Ok(new { message = "Updated", updated });
 
         }

@@ -7,11 +7,11 @@ namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientController : BaseController
     {
         private readonly IClientService service;
 
-        public ClientController(IClientService service)
+        public ClientController(IClientService service,IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
             this.service = service;
         }
@@ -19,7 +19,9 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult CreateClient([FromBody] ClientRequest task)
         {
-            service.AddNew<Client, ClientRequest>(task);
+            var CurrentUserId=GetUserId();
+            
+            service.AddNew<Client, ClientRequest>(task,CurrentUserId);
             return Ok("added");
 
         }
@@ -40,10 +42,11 @@ namespace TaskManagementSystem.Controllers
         [Route("{id}")]
 
 
-        public IActionResult UpdateClient([FromBody] ClientRequest task, Guid id)
+        public IActionResult UpdateClient([FromBody] ClientRequest task, Guid ClientId)
         {
-            service.Edit<Client, ClientRequest>(task, id);
-            var updated = service.GetByID<Client, ClientRequest>(id);
+            
+            service.Edit<Client, ClientRequest>(task, ClientId,GetUserId());
+            var updated = service.GetByID<Client, ClientRequest>(ClientId);
             return Ok(new { message = "Updated", updated });
 
         }

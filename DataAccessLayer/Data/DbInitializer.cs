@@ -15,14 +15,14 @@ namespace DataAccessLayer.Data
         public async System.Threading.Tasks.Task Initializer()
         {
 
-            if (context.Users.FirstOrDefault(x=> x.Role=="Admin")==null)
+            if (context.Users.FirstOrDefault(x=> x.UserType.ToString() =="Manager")==null)
             {
                 var user = new User
                 {
                     PhoneNumber = "9847035197",
                     Email = "Ultimatetester@gmail.com",
                     Name = "Admin",
-                    Role = "Admin",
+                    UserType= 0,
                     Password = "Asdfghjkl12@"
 
 

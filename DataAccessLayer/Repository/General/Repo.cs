@@ -19,6 +19,7 @@ namespace DataAccessLayer.Repository.General
         public void Add<TModel>(TModel tmodel) where TModel : class
         {
             context.Set<TModel>().Add(tmodel);
+
         }
 
         public List<TViewModel> GetAll<T,TViewModel>() where T : class

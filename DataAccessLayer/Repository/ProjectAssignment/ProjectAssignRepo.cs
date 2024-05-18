@@ -1,18 +1,9 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Conventions;
 using DataAccessLayer.Data;
 using DataAccessLayer.Repository.General;
 using DomainLayer.Model;
 using DomainLayer.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository.AssignMember
 {
@@ -30,7 +21,7 @@ namespace DataAccessLayer.Repository.AssignMember
         public void AddMember(ProjectUserRequest member)
         {
             var model = mapper.Map<ProjectUser>(member);
-            context.ProjectUser.Add(model);
+            context.ProjectUsers.Add(model);
 
         }
         public ProjectAssignResponse GetAll(Guid id)

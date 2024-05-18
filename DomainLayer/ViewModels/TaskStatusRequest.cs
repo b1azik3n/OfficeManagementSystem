@@ -9,6 +9,6 @@ namespace DomainLayer.ViewModels
 {
     public class TaskStatusRequest
     {
-        public Status Status { get; set; }
+        public Enum.TaskStatus Status { get; set; }
     }
 }

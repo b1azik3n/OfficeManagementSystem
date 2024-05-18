@@ -20,7 +20,7 @@ namespace DataAccessLayer.Repository.Projects
 
         public void AddNew(Project project,Guid id)
         {
-            project.Status = Status.Started;
+            project.Status = DomainLayer.Enum.TaskStatus.Started;
             project.ClientId= id;
             context.Projects.Add(project);
 

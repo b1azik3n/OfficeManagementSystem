@@ -17,19 +17,22 @@ namespace TaskManagementSystem.Services.GeneralService
             this.unit = unit;
         }
 
-        public void AddNew<Tmodel, TViewModel>(TViewModel viewModel) where Tmodel : BaseClass
+        public void AddNew<Tmodel, TViewModel>(TViewModel viewModel,Guid Id) where Tmodel : BaseClass
         {
 
             var project = mapper.Map<Tmodel>(viewModel);
+            project.CreatedBy= Id;
             unit.Repo.Add(project);
             unit.SaveChanges();
         }
 
-        public void Edit<Tmodel, TViewModel>(TViewModel tmodel, Guid Id) where Tmodel : BaseClass
+        public void Edit<Tmodel, TViewModel>(TViewModel tmodel, Guid Id,Guid UserId) where Tmodel : BaseClass
         {
 
             var model = unit.Repo.GetByID<Tmodel>(Id);
             mapper.Map(tmodel, model);
+            model.LastModifiedBy = UserId;
+            model.LastModifiedOn=DateTime.Now;
             unit.Repo.Update(model);
             unit.SaveChanges();
         }

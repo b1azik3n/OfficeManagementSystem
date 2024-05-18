@@ -8,8 +8,8 @@ namespace DomainLayer.Enum
 {
     public enum UserType
     {
-        Employee,
         Manager,
+        Employee,     
         Auditor,
         Client,
         Customer,

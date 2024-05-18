@@ -9,7 +9,7 @@ namespace DomainLayer.ViewModels
         public string Description { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
-        public Status Status { get; set; }
+        public Enum.TaskStatus Status { get; set; }
 
         public Guid ClientId { get; set; } 
 

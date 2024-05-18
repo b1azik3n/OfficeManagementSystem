@@ -8,11 +8,11 @@ namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class ProjectController : BaseController
     {
         private readonly IProjectService service;
 
-        public ProjectController(IProjectService service)
+        public ProjectController(IProjectService service, IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
             this.service = service;
         }
@@ -20,7 +20,8 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult AddProject([FromBody] ProjectRequest project)
         {
-            service.AddNew<Project,ProjectRequest>(project);
+            var id=GetUserId();
+            service.AddNew<Project, ProjectRequest>(project, id);
             return Ok("Added");
 
         }
@@ -39,8 +40,8 @@ namespace TaskManagementSystem.Controllers
         [HttpPut] //solve
         public IActionResult UpdateProject([FromBody] ProjectRequest project, Guid Id)
         {
-            service.Edit<Project, ProjectRequest>(project, Id);
-            var updated = service.GetByID<Project,ProjectRequest>(Id);
+            service.Edit<Project, ProjectRequest>(project, Id,GetUserId());
+            var updated = service.GetByID<Project,ProjectResponse>(Id);
             return Ok(new { message = "Updated", updated });
 
         }

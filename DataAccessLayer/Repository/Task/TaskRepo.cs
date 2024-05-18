@@ -25,7 +25,7 @@ namespace DataAccessLayer.Repository.Task
                 Select(x=> x.ProjectId).
                 FirstOrDefault();
 
-            List<Guid> userids = context.ProjectUser.Where(x => x.ProjectId == projectid).Select(x => x.UserId).ToList();
+            List<Guid> userids = context.ProjectUsers.Where(x => x.ProjectId == projectid).Select(x => x.UserId).ToList();
             foreach (var user in userids)
             {
                 if(user==task.UserId)

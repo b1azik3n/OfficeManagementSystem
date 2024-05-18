@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DomainLayer.Enum;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -12,8 +13,7 @@ namespace DomainLayer.Model
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
-        public string Role { get; set; }
-        public string UserType { get; set; }
+        public UserType UserType { get; set; }
         public string OrgID { get; set; }
         
         public ICollection<DailyLog> DailyLogs { get; set; }

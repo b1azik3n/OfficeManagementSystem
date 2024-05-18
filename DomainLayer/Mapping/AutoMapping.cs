@@ -13,9 +13,7 @@ namespace DomainLayer.Mapping
             CreateMap<Project, ProjectRequest>().ReverseMap();
             CreateMap<Project, ProjectResponse>().ReverseMap();
             CreateMap<ProjectUser, ProjectUserResponse>().ReverseMap();
-            CreateMap<RegisterUserRequest, User>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => "User"))
-                .ReverseMap();
+            CreateMap<RegisterUserRequest, User>().ReverseMap();
             CreateMap<DailyLog, DailyLogRequest>().ReverseMap();
             CreateMap<DailyLogRequest, DailyLogRequest>().ReverseMap();
             CreateMap<Designation, DesignationRequest>().ReverseMap();
@@ -26,7 +24,8 @@ namespace DomainLayer.Mapping
             CreateMap<TaskModel,TaskAllResponse>().ReverseMap();
             CreateMap<TaskModel,TaskStatusRequest>().ReverseMap();
             CreateMap<TaskModel,TaskStatusResponse>().ReverseMap();
-            
+            CreateMap<EmployeeRequest,Employee>().ReverseMap();
+            CreateMap<Auditor, AuditorRequest>().ReverseMap();
         }
     }
 }

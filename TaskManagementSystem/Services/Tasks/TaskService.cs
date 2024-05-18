@@ -17,15 +17,16 @@ namespace TaskManagementSystem.Services.Tasks
             this.unit = unit;
         }
 
-        public bool AssignTask(TaskUserRequest taskUser)
+        public bool AssignTask(TaskUserRequest taskUser,Guid Id)
         {
    
             if (unit.TaskRepo.CheckAssignment(taskUser))
             {
-                var send = mapper.Map<TaskUser>(taskUser);
-                unit.Repo.Add<TaskUser>(send);  
-                unit.SaveChanges();
-                return true;
+                AddNew<TaskUser, TaskUserRequest>(taskUser, Id);
+                //var send = mapper.Map<TaskUser>(taskUser);
+                //unit.Repo.Add<TaskUser>(send);  
+                //unit.SaveChanges();
+                //return true;
 
             }
             return false;

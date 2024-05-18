@@ -14,7 +14,7 @@ namespace DomainLayer.Model
 
         public string StartDate { get; set; }
         public string EndDate { get;set; }
-        public Status Status { get; set; }
+        public Enum.TaskStatus Status { get; set; }
 
         [ForeignKey(nameof(Client))]
 

@@ -51,7 +51,7 @@ namespace TaskManagementSystem.Controllers
             {
 
                 new Claim (ClaimTypes.Email, user. Email),
-                new Claim (ClaimTypes.Role, user.UserType),
+                new Claim (ClaimTypes.Role, user.UserType.ToString()),
                 new Claim (ClaimTypes. NameIdentifier, user.Id.ToString()),
 
 
@@ -60,7 +60,7 @@ namespace TaskManagementSystem.Controllers
                  configuration["Jwt: Issuer"],
                  configuration["Jwt: Audience"],
                   claims,
-                  expires: DateTime.Now.AddMinutes(15),
+                  expires: DateTime.Now.AddDays(30),
                    signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
