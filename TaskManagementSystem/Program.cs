@@ -9,7 +9,9 @@ using DomainLayer.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
+using TaskManagementSystem.Exception1;
 using TaskManagementSystem.Services.Authentication;
 using TaskManagementSystem.Services.Clients;
 using TaskManagementSystem.Services.DailyLogs;
@@ -31,7 +33,7 @@ namespace TaskManagementSystem
             // Add services to the container.
 
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             
             builder.Services.AddEndpointsApiExplorer();
@@ -69,18 +71,42 @@ namespace TaskManagementSystem
             builder.Services.AddScoped<ITaskRepo,TaskRepo>();
             builder.Services.AddScoped<ITaskService,TaskService>();
             builder.Services.AddScoped<IClientService, ClientService>();
+            //builder.Services.AddLogging();
+
+
+            //builder.Logging.ClearProviders();
+
+            //var logger = new LoggerConfiguration()
+            //  .ReadFrom.Configuration(builder.Configuration)
+            //  .Enrich.FromLogContext()
+            //  .CreateLogger();
+            //builder.Logging.AddSerilog(logger); 
+            builder.Services.AddLogging(loggingBuilder => {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddSerilog(new LoggerConfiguration()
+                    .ReadFrom.Configuration(builder.Configuration)
+                    .Enrich.FromLogContext()
+                    .CreateLogger());
+            });
+
+
 
 
             var app = builder.Build();
+          
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+           }
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
+
 
             app.UseHttpsRedirection();
+
             app.UseAuthentication();
 
             app.UseAuthorization();

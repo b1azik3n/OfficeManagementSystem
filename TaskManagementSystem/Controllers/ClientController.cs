@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Model;
 using DomainLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagementSystem.Services.Clients;
 
@@ -10,10 +11,12 @@ namespace TaskManagementSystem.Controllers
     public class ClientController : BaseController
     {
         private readonly IClientService service;
+        private readonly ILogger<ClientController> logger;
 
-        public ClientController(IClientService service,IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public ClientController(IClientService service,IHttpContextAccessor contextAccessor, ILogger<ClientController> logger) : base(contextAccessor)
         {
             this.service = service;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -22,12 +25,14 @@ namespace TaskManagementSystem.Controllers
             var CurrentUserId=GetUserId();
             
             service.AddNew<Client, ClientRequest>(task,CurrentUserId);
+            logger.LogInformation("Added New Client");
             return Ok("added");
 
         }
         [HttpGet]
         public IActionResult GetAllClients()
         {
+            throw new NotImplementedException("Work FFS");
             var list = service.GetAll<Client,ClientRequest>();
             return Ok(list);
         }
@@ -39,7 +44,7 @@ namespace TaskManagementSystem.Controllers
             return Ok(task);
         }
         [HttpPut]
-        [Route("{id}")]
+        [Route("{ClientId}")]
 
 
         public IActionResult UpdateClient([FromBody] ClientRequest task, Guid ClientId)
@@ -51,17 +56,19 @@ namespace TaskManagementSystem.Controllers
 
         }
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{Id}")]
 
 
         public IActionResult DeleteClient(Guid Id)
         {
             if( service.Remove<Client, ClientRequest>(Id))
             {
-                return NotFound("User Doesn't Exist");
+                return Ok("Deleted");
+
 
             }
-            return Ok("Deleted");
+            return NotFound("User Doesn't Exist");
+
         }
     }
 }

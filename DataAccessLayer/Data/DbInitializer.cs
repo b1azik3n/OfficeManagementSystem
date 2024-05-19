@@ -12,10 +12,10 @@ namespace DataAccessLayer.Data
         {
             this.context = context;
         }
-        public async System.Threading.Tasks.Task Initializer()
+        public async Task Initializer()
         {
 
-            if (context.Users.FirstOrDefault(x=> x.UserType.ToString() =="Manager")==null)
+            if ((context.Users.FirstOrDefault(x=> x.UserType==0))==null)
             {
                 var user = new User
                 {
@@ -23,7 +23,8 @@ namespace DataAccessLayer.Data
                     Email = "Ultimatetester@gmail.com",
                     Name = "Admin",
                     UserType= 0,
-                    Password = "Asdfghjkl12@"
+                    Password = "Asdfghjkl12@",
+                    OrgID= "AdminThisIs"
 
 
                 };

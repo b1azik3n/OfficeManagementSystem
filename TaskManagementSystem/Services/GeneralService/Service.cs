@@ -53,7 +53,9 @@ namespace TaskManagementSystem.Services.GeneralService
 
         public bool Remove<Tmodel, TViewModel>(Guid Id) where Tmodel : BaseClass
         {
-            return unit.Repo.Remove<Tmodel>(Id);
+            var send= unit.Repo.Remove<Tmodel>(Id);
+            unit.SaveChanges();
+            return send;
          
 
         }
