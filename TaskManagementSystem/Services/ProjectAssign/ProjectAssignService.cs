@@ -4,9 +4,9 @@ using DomainLayer.Model;
 using DomainLayer.ViewModels;
 using TaskManagementSystem.Services.GeneralService;
 
-namespace TaskManagementSystem.Services.MemberAssign
+namespace TaskManagementSystem.Services.ProjectAssign
 {
-    public class ProjectAssignService : Service,IProjectAssignService
+    public class ProjectAssignService : Service, IProjectAssignService
     {
         private readonly IMapper mapper;
         private readonly IUnitOfWork unit;
@@ -17,14 +17,8 @@ namespace TaskManagementSystem.Services.MemberAssign
             this.unit = unit;
         }
 
+       
 
-        //public void AddMember(ProjectUserRequest project)
-        //{
-        //    var send = mapper.Map<ProjectUser>(project);
-        //    unit.ProjectAssignRepo.AddMember(send);
-        //    unit.SaveChanges();
-
-        //}
 
         public ProjectAssignResponse ViewMembers(Guid Id)
         {
@@ -32,5 +26,21 @@ namespace TaskManagementSystem.Services.MemberAssign
             return data;
 
         }
+        public void AddNew(ProjectMultipleUserRequest request, Guid Id)
+        {
+            foreach (var user in request.UserAndDesignation)
+            {
+                var singlerequest = new ProjectSingleUserRequest
+                {
+                    UserId = user.UserId,
+                    ProjectId = request.ProjectId,
+                    DesignationId = user.DesignationId,
+
+
+                };
+                AddNew<ProjectUser, ProjectSingleUserRequest>(singlerequest, Id);
+            }
+        }
     }
 }
+

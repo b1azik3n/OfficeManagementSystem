@@ -2,11 +2,11 @@
 using DomainLayer.Model;
 using DomainLayer.ViewModels;
 
-namespace DataAccessLayer.Repository.AssignMember
+namespace DataAccessLayer.Repository.ProjectAssignment
 {
-    public interface IProjectAssignRepo:IRepo
+    public interface IProjectAssignRepo : IRepo
     {
-        void AddMember(ProjectUserRequest member);
+        void AddMember(ProjectSingleUserRequest member);
         ProjectAssignResponse GetAll(Guid id);
 
     }

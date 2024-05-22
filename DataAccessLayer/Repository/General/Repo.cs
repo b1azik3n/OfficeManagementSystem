@@ -56,10 +56,38 @@ namespace DataAccessLayer.Repository.General
         {
             context.Set<Tmodel>().Update(project);
         }
-        public string GetNameFromId<Tmodel>(Guid id) where Tmodel: BaseNameClass
+        public string GetNameFromId<Tmodel>(Guid id) where Tmodel: BaseActor
         {
             var name = context.Set<Tmodel>().FirstOrDefault(x => x.Id == id).Name;
             return name;
         }
+        public bool EmailExist<Tmodel>(Tmodel tmodel) where Tmodel : BaseActor
+        {
+           if(context.Set<Tmodel>().FirstOrDefault(x=> x.Email == tmodel.Email)!=null)
+            {
+                return true;
+
+            }
+           return false;
+        }
+        public bool PhoneNumberExist<Tmodel>(Tmodel tmodel) where Tmodel : BaseActor
+        {
+            if (context.Set<Tmodel>().FirstOrDefault(x => x.PhoneNumber == tmodel.PhoneNumber) != null)
+            {
+                return true;
+
+            }
+            return false;
+        }
+        public bool IdExist<Tmodel>(Guid Id) where Tmodel : BaseClass
+        {
+            if (context.Set<Tmodel>().FirstOrDefault(x => x.Id == Id) != null)
+            {
+                return true;
+
+            }
+            return false;
+        }
+
     }
 }

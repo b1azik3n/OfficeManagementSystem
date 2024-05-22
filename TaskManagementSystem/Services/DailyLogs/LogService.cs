@@ -33,6 +33,7 @@ namespace TaskManagementSystem.Services.DailyLogs
             var vm = mapper.Map<DailyLogResponse>(log);
             var name= unit.LogRepo.GetNameFromId<User>(log.UserId);
             vm.UserName = name;
+            
             return vm;
         }
 

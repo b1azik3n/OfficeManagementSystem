@@ -7,21 +7,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TaskManagementSystem.Services.Authentication;
+using TaskManagementSystem.Services.GeneralService;
 
 namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : BaseController
     {
         private readonly IConfiguration configuration;
-        private readonly IAuthService authenticationService;
+        private readonly IAuthService service;
 
-        public AuthenticationController(IConfiguration configuration, IAuthService authenticationService)
+        public AuthenticationController(IHttpContextAccessor contextAccessor, IConfiguration configuration,IAuthService service) : base(contextAccessor)
         {
             this.configuration = configuration;
-            this.authenticationService = authenticationService;
+            this.service = service;
         }
+    
         [AllowAnonymous]
         [HttpPost]
         public IActionResult Login([FromBody] UserLoginRequest userLogin)
@@ -68,24 +70,30 @@ namespace TaskManagementSystem.Controllers
 
         private User Authenticate(UserLoginRequest userLogin)
         {
-            var user = authenticationService.FindUser(userLogin);
+            var user = service.FindUser(userLogin);
             return user;
 
 
         }
         [HttpPost]
 
-        public IActionResult RegisterUser(RegisterUserRequest user)
+        public IActionResult RegisterUser(UserRequest user)
         {
             if (user == null)
             {
                 return BadRequest();
             }
-            if (authenticationService.RegisterUser(user) == true)
+            if (service.CheckIfDuplicateEmail<User, UserRequest>(user))
             {
-                return Ok("Registration Successful");
+                return BadRequest("EmailAlreadyExists!");
             }
-            return BadRequest("Something went wrong"); //better
+            if (service.CheckIfDuplicatePhoneNumber<User, UserRequest>(user))
+            {
+                return BadRequest("PhoneNumberAlreadyExists!");
+            }
+
+            service.AddNew<User, UserRequest>(user, GetUserId());
+            return Ok();
 
 
         }

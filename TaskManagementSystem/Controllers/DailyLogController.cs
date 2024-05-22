@@ -41,6 +41,12 @@ namespace TaskManagementSystem.Controllers
         //[Authorize(Roles = "Employee")]
         public IActionResult SubmitLog([FromBody] DailyLogRequest log)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
+
             string UserId = GetUserIDFromToken();
             logService.AddNew<DailyLog,DailyLogRequest>(log,UserId);
 

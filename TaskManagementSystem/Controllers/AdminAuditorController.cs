@@ -21,6 +21,11 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] AuditorRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
             service.AddNew<Auditor, AuditorRequest>(request, GetUserId());
             return Ok("Created");
 

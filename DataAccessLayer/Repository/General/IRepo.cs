@@ -15,7 +15,13 @@ namespace DataAccessLayer.Repository.General
         List<TViewModel> GetAll<T,TViewModel>() where T : class;
         Tmodel GetByID<Tmodel>(Guid Id) where Tmodel : BaseClass;
         void Update<Tmodel>(Tmodel project) where Tmodel : class;
-        string GetNameFromId<Tmodel>(Guid id) where Tmodel : BaseNameClass;
+        string GetNameFromId<Tmodel>(Guid id) where Tmodel : BaseActor;
+         bool EmailExist<Tmodel>(Tmodel tmodel) where Tmodel : BaseActor;
+         bool PhoneNumberExist<Tmodel>(Tmodel tmodel) where Tmodel : BaseActor;
+        bool IdExist<Tmodel>(Guid Id) where Tmodel : BaseClass;
+
+
+
 
     }
 }

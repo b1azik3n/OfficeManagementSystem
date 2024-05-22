@@ -5,14 +5,13 @@ namespace TaskManagementSystem.Exception1
 {
     public class GlobalExceptionMiddleware
     {
-        private readonly ILogger<GlobalExceptionMiddleware> logger;
-        private readonly RequestDelegate next;
+        private readonly ILogger<GlobalExceptionMiddleware> _logger;
+        private readonly RequestDelegate _next;
 
         public GlobalExceptionMiddleware( ILogger<GlobalExceptionMiddleware> logger,RequestDelegate next)
         {
-            next = next ?? throw new ArgumentNullException(nameof(next));
-            logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            logger.LogInformation("GlobalExceptionMiddleware is constructed");
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         }
 
@@ -20,11 +19,11 @@ namespace TaskManagementSystem.Exception1
         {
             try
             {
-                await next(context);
+                await _next(context);
             }
             catch (Exception ex)
             {
-                logger.LogInformation(ex.ToString());
+                _logger.LogError(ex.ToString());
                 await HandleExceptionAsync(context, ex);
             }
         }

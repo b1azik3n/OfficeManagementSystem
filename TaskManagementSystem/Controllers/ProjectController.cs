@@ -20,9 +20,19 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult AddProject([FromBody] ProjectRequest project)
         {
-            var id=GetUserId();
-            service.AddNew<Project, ProjectRequest>(project, id);
-            return Ok("Added");
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
+            if (service.CheckIfIdExists<Client>(project.ClientId))
+            {
+
+                var id = GetUserId();
+                service.AddNew<Project, ProjectRequest>(project, id);
+                return Ok("Added");
+            }
+            return BadRequest();
 
         }
         [HttpGet]
@@ -33,13 +43,24 @@ namespace TaskManagementSystem.Controllers
         }
         [HttpGet]
         [Route("{Id}")] //solve
-        public IActionResult Get_A_Project(Guid Id) {
-            var project = service.GetByID(Id);
-            return Ok(project);
+        public IActionResult Get_A_Project(Guid Id) 
+        {
+            if(service.CheckIfIdExists<Client>(Id))
+            {
+
+                var project = service.GetByID(Id);
+                return Ok(project);
+            }
+            return BadRequest();
         }
         [HttpPut] //solve
         public IActionResult UpdateProject([FromBody] ProjectRequest project, Guid Id)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
             service.Edit<Project, ProjectRequest>(project, Id,GetUserId());
             var updated = service.GetByID<Project,ProjectResponse>(Id);
             return Ok(new { message = "Updated", updated });

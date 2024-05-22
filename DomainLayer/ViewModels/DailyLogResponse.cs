@@ -11,7 +11,7 @@ namespace DomainLayer.ViewModels
         public string UserName {  get; set; }
 
         public string TaskTitle { get; set; }
-        public string DateTime { get; set; }
+        public DateTime CreatedOn { get; set; }
         public string Description { get; set; }
     }
 }

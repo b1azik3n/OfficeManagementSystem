@@ -2,14 +2,12 @@
 
 namespace DomainLayer.Model
 {
-    public class Client:BaseNameClass
+    public class Client:BaseActor
     {
         [Required]
         [StringLength(25)]
         public string Location { get; set; }
-        public string PhoneNumber {  get; set; }
 
-        public string EmailAddress { get; set; }    
         public int  VAT {  get; set; }
         public int PAN { get; set; }
  

@@ -13,7 +13,6 @@ namespace DomainLayer.Model
         public Guid UserId{  get; set; }
         [ForeignKey(nameof(Task))]
         public Guid TaskId { get; set; }
-        public string Assigned_On { get; set; }
         public TaskModel Task { get; set; }
         public User User { get; set; }
 

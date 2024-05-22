@@ -5,7 +5,7 @@ using DomainLayer.Model;
 using DomainLayer.ViewModels;
 using System.Data;
 
-namespace DataAccessLayer.Repository.AssignMember
+namespace DataAccessLayer.Repository.ProjectAssignment
 {
     public class ProjectAssignRepo : Repo, IProjectAssignRepo
     {
@@ -18,7 +18,7 @@ namespace DataAccessLayer.Repository.AssignMember
             this.mapper = mapper;
         }
 
-        public void AddMember(ProjectUserRequest member)
+        public void AddMember(ProjectSingleUserRequest member)
         {
             var model = mapper.Map<ProjectUser>(member);
             context.ProjectUsers.Add(model);

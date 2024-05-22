@@ -1,8 +1,8 @@
 using AutoMapper;
 using DataAccessLayer.Data;
-using DataAccessLayer.Repository.AssignMember;
 using DataAccessLayer.Repository.DailyLogs;
 using DataAccessLayer.Repository.General;
+using DataAccessLayer.Repository.ProjectAssignment;
 using DataAccessLayer.Repository.Task;
 using DataAccessLayer.Repository.UnitOfWork;
 using DomainLayer.Mapping;
@@ -12,11 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using TaskManagementSystem.Exception1;
+using TaskManagementSystem.MailConfigurations;
+using TaskManagementSystem.Mediators;
 using TaskManagementSystem.Services.Authentication;
 using TaskManagementSystem.Services.Clients;
 using TaskManagementSystem.Services.DailyLogs;
 using TaskManagementSystem.Services.GeneralService;
-using TaskManagementSystem.Services.MemberAssign;
+using TaskManagementSystem.Services.Mail;
+using TaskManagementSystem.Services.ProjectAssign;
 using TaskManagementSystem.Services.Projects;
 using TaskManagementSystem.Services.Tasks;
 
@@ -24,7 +27,7 @@ namespace TaskManagementSystem
 {
 
     public class Program
-    { 
+    {
 
         public static void Main(string[] args)
         {
@@ -35,7 +38,7 @@ namespace TaskManagementSystem
 
             builder.Services.AddControllers().AddNewtonsoftJson();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<TaskDbContext>(options => options.
@@ -55,56 +58,46 @@ namespace TaskManagementSystem
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
 
-                }); 
+                });
             builder.Services.AddAutoMapper(typeof(AutoMapping));
             builder.Services.AddScoped<ILogService, LogService>();
             builder.Services.AddScoped<ILogRepo, LogRepo>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IRepo, Repo>();
-            builder.Services.AddScoped<IService,Service>();
+            builder.Services.AddScoped<IService, Service>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IProjectAssignRepo, ProjectAssignRepo>();
-            builder.Services.AddScoped<IProjectAssignService, ProjectAssignService>();    
+            builder.Services.AddScoped<IProjectAssignService, ProjectAssignService>();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ITaskRepo,TaskRepo>();
-            builder.Services.AddScoped<ITaskService,TaskService>();
+            builder.Services.AddScoped<ITaskRepo, TaskRepo>();
+            builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IClientService, ClientService>();
-            //builder.Services.AddLogging();
+            builder.Services.AddTransient<IMailService, MailService>();
+            builder.Services.AddScoped<IMediator,Mediator>();
+
+            //mail
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 
-            //builder.Logging.ClearProviders();
-
-            //var logger = new LoggerConfiguration()
-            //  .ReadFrom.Configuration(builder.Configuration)
-            //  .Enrich.FromLogContext()
-            //  .CreateLogger();
-            //builder.Logging.AddSerilog(logger); 
-            builder.Services.AddLogging(loggingBuilder => {
-                loggingBuilder.ClearProviders();
-                loggingBuilder.AddSerilog(new LoggerConfiguration()
-                    .ReadFrom.Configuration(builder.Configuration)
-                    .Enrich.FromLogContext()
-                    .CreateLogger());
-            });
+            Log.Logger = new LoggerConfiguration()
+             .ReadFrom.Configuration(builder.Configuration)
+              .CreateLogger();
+            builder.Host.UseSerilog();
 
 
 
 
             var app = builder.Build();
-          
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-           }
+            }
+            app.UseSerilogRequestLogging();
             app.UseMiddleware<GlobalExceptionMiddleware>();
-
-
-
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
@@ -117,6 +110,7 @@ namespace TaskManagementSystem
 
 
             app.Run();
+            Log.Information("App started");
             void SeedDatabase()
             {
                 using (var scope = app.Services.CreateScope())

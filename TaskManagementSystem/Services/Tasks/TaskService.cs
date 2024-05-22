@@ -23,14 +23,11 @@ namespace TaskManagementSystem.Services.Tasks
             if (unit.TaskRepo.CheckAssignment(taskUser))
             {
                 AddNew<TaskUser, TaskUserRequest>(taskUser, Id);
-                //var send = mapper.Map<TaskUser>(taskUser);
-                //unit.Repo.Add<TaskUser>(send);  
-                //unit.SaveChanges();
-                //return true;
+                return true;
+                
 
             }
             return false;
-            //return unit.TaskRepo.AssignTask(send);
 
         }
 
@@ -50,6 +47,11 @@ namespace TaskManagementSystem.Services.Tasks
                  
                 return send;                        
         }
+        public void DeleteTaskAssignment(DeleteTaskAssignedRequest vm)
+        {
+            unit.TaskRepo.RemoveTaskAssignment(vm);
+        }
+
 
     }
 }

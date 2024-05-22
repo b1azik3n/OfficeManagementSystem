@@ -11,7 +11,6 @@ namespace DomainLayer.Model
  public class DailyLog:BaseClass
     {      
         public string TaskTitle { get; set; }
-        public string DateTime { get; set; }
         public string Description { get; set; }
 
         [ForeignKey(nameof(User))]

@@ -10,6 +10,7 @@ namespace TaskManagementSystem.Services.Tasks
 
         void CreateTask(TaskRequest taskVM);
         public TaskResponse GetByID(Guid Id);
+        void DeleteTaskAssignment (DeleteTaskAssignedRequest vm);
 
     }
 }

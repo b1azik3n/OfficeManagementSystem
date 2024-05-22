@@ -14,6 +14,7 @@ namespace DataAccessLayer.Repository.Task
         void AddTask(TaskModel task);
         bool CheckAssignment(TaskUserRequest task);
          TaskResponse GetByID(Guid id);
+        void RemoveTaskAssignment(DeleteTaskAssignedRequest task);
 
 
     }

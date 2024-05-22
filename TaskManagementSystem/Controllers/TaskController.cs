@@ -19,6 +19,11 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult CreateTask([FromBody] TaskRequest task)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
             service.AddNew<TaskModel,TaskRequest>(task,GetUserId());
             return Ok("added");
 
@@ -43,9 +48,19 @@ namespace TaskManagementSystem.Controllers
 
         public IActionResult EditTask([FromBody] TaskRequest task, Guid id)
         {
-                service.Edit<TaskModel,TaskRequest>(task,id, GetUserId());
-                var updated=service.GetByID<TaskModel,TaskResponse> (id);
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
+            if (service.CheckIfIdExists<Project>(task.ProjectId))
+            {
+
+                service.Edit<TaskModel, TaskRequest>(task, id, GetUserId());
+                var updated = service.GetByID<TaskModel, TaskResponse>(id);
                 return Ok(new { message = "Updated", updated });
+            }
+            return BadRequest();
 
         }
         [HttpDelete]

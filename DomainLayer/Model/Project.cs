@@ -19,6 +19,8 @@ namespace DomainLayer.Model
         [ForeignKey(nameof(Client))]
 
         public Guid ClientId { get; set; }
+        [Required]
+        public Guid TeamLeadId{  get; set; }
 
 
 

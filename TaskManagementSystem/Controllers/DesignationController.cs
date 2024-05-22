@@ -33,6 +33,11 @@ namespace TaskManagementSystem.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] DesignationRequest designation)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
             var Id = GetUserId();
 
             service.AddNew<Designation, DesignationRequest>(designation, Id);

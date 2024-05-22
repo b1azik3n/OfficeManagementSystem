@@ -63,7 +63,7 @@ namespace TaskManagementSystem.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmailAddress")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -109,10 +109,6 @@ namespace TaskManagementSystem.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DateTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -185,22 +181,18 @@ namespace TaskManagementSystem.Migrations
 
                     b.Property<string>("DOB")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(6);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmailAddress")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(8);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
-                        .HasColumnType("int")
-                        .HasColumnOrder(7);
+                        .HasColumnType("int");
 
                     b.Property<string>("JoinedDate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(2);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -210,21 +202,21 @@ namespace TaskManagementSystem.Migrations
 
                     b.Property<string>("LeftDate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(5);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(1);
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Position")
-                        .HasColumnType("int")
-                        .HasColumnOrder(3);
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int")
-                        .HasColumnOrder(4);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -272,6 +264,9 @@ namespace TaskManagementSystem.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("TeamLeadId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -402,10 +397,6 @@ namespace TaskManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(0);
-
-                    b.Property<string>("Assigned_On")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");

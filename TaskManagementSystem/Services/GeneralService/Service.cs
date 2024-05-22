@@ -2,7 +2,6 @@
 using AutoMapper;
 using DataAccessLayer.Repository.UnitOfWork;
 using DomainLayer.Model;
-using DomainLayer.ViewModels;
 
 namespace TaskManagementSystem.Services.GeneralService
 {
@@ -17,27 +16,27 @@ namespace TaskManagementSystem.Services.GeneralService
             this.unit = unit;
         }
 
-        public void AddNew<Tmodel, TViewModel>(TViewModel viewModel,Guid Id) where Tmodel : BaseClass
+        public virtual void AddNew<Tmodel, TViewModel>(TViewModel viewModel, Guid Id) where Tmodel : BaseClass
         {
 
             var project = mapper.Map<Tmodel>(viewModel);
-            project.CreatedBy= Id;
+            project.CreatedBy = Id;
             unit.Repo.Add(project);
             unit.SaveChanges();
         }
 
-        public void Edit<Tmodel, TViewModel>(TViewModel tmodel, Guid Id,Guid UserId) where Tmodel : BaseClass
+        public void Edit<Tmodel, TViewModel>(TViewModel tmodel, Guid Id, Guid UserId) where Tmodel : BaseClass
         {
 
             var model = unit.Repo.GetByID<Tmodel>(Id);
             mapper.Map(tmodel, model);
             model.LastModifiedBy = UserId;
-            model.LastModifiedOn=DateTime.Now;
+            model.LastModifiedOn = DateTime.Now;
             unit.Repo.Update(model);
             unit.SaveChanges();
         }
 
-        public List<TViewModel> GetAll<Tmodel,TViewModel>() where Tmodel : BaseClass
+        public List<TViewModel> GetAll<Tmodel, TViewModel>() where Tmodel : BaseClass
         {
             var list = unit.Repo.GetAll<Tmodel, TViewModel>();
             return list;
@@ -53,12 +52,32 @@ namespace TaskManagementSystem.Services.GeneralService
 
         public bool Remove<Tmodel, TViewModel>(Guid Id) where Tmodel : BaseClass
         {
-            var send= unit.Repo.Remove<Tmodel>(Id);
+            var send = unit.Repo.Remove<Tmodel>(Id);
             unit.SaveChanges();
             return send;
-         
+
 
         }
-        
+        public bool CheckIfDuplicateEmail<Tmodel, TViewModel>(TViewModel tviewmodel) where Tmodel : BaseActor
+        {
+            var mapped= mapper.Map<Tmodel>(tviewmodel);
+            if (unit.Repo.EmailExist<Tmodel>(mapped)) {return true;}
+            return false;
+           
+        }
+        public bool CheckIfDuplicatePhoneNumber<Tmodel, TViewModel>(TViewModel tviewmodel) where Tmodel : BaseActor
+        {
+            var mapped = mapper.Map<Tmodel>(tviewmodel);
+            if (unit.Repo.PhoneNumberExist<Tmodel>(mapped)) { return true; }
+            return false;
+
+        }
+
+        public bool CheckIfIdExists<Tmodel>(Guid Id) where Tmodel : BaseClass
+        {
+           
+            if (unit.Repo.IdExist<Tmodel>(Id)) { return true; }
+            return false;
+        }
     }
 }

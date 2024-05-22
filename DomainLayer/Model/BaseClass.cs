@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Model
 {
-    public abstract class BaseClass
+    public abstract class BaseClass 
     {
         [Key]
         [Column(Order = 0)]

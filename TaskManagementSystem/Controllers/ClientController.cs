@@ -20,11 +20,23 @@ namespace TaskManagementSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateClient([FromBody] ClientRequest task)
+        public IActionResult CreateClient([FromBody] ClientRequest client)
         {
+            if (!ModelState.IsValid)
+            {
+                var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
+                return new BadRequestObjectResult(message);
+            }
+            if (service.CheckIfDuplicateEmail<Client, ClientRequest>(client))
+            {
+                return BadRequest("EmailAlreadyExists!");
+            }
+            if(service.CheckIfDuplicatePhoneNumber<Client, ClientRequest>(client))
+            {
+                return BadRequest("PhoneNumberAlreadyExists!");
+            }
             var CurrentUserId=GetUserId();
-            
-            service.AddNew<Client, ClientRequest>(task,CurrentUserId);
+            service.AddNew<Client, ClientRequest>(client,CurrentUserId);
             logger.LogInformation("Added New Client");
             return Ok("added");
 
@@ -32,7 +44,7 @@ namespace TaskManagementSystem.Controllers
         [HttpGet]
         public IActionResult GetAllClients()
         {
-            throw new NotImplementedException("Work FFS");
+            
             var list = service.GetAll<Client,ClientRequest>();
             return Ok(list);
         }
@@ -40,23 +52,41 @@ namespace TaskManagementSystem.Controllers
         [Route("{id}")]
         public IActionResult GetParticular(Guid id)
         {
-            var task = service.GetByID<Client, ClientRequest>(id);
-            return Ok(task);
+            if(service.CheckIfIdExists<Client>(id))
+            {
+
+                var task = service.GetByID<Client, ClientRequest>(id);
+                return Ok(task);
+            }
+            return BadRequest("Invalid Id");
         }
         [HttpPut]
         [Route("{ClientId}")]
 
 
-        public IActionResult UpdateClient([FromBody] ClientRequest task, Guid ClientId)
+        public IActionResult UpdateClient([FromBody] ClientRequest client, Guid ClientId)
         {
             
-            service.Edit<Client, ClientRequest>(task, ClientId,GetUserId());
-            var updated = service.GetByID<Client, ClientRequest>(ClientId);
-            return Ok(new { message = "Updated", updated });
+            
+                if (service.CheckIfDuplicateEmail<Client, ClientRequest>(client))
+                {
+                    return BadRequest("EmailAlreadyExists!");
+                }
+                if (service.CheckIfDuplicatePhoneNumber<Client, ClientRequest>(client))
+                {
+                    return BadRequest("PhoneNumberAlreadyExists!");
+                }
+
+                service.Edit<Client, ClientRequest>(client, ClientId, GetUserId());
+                var updated = service.GetByID<Client, ClientRequest>(ClientId);
+                return Ok(new { message = "Updated", updated });
+
+            
+            
 
         }
         [HttpDelete]
-        [Route("{Id}")]
+        
 
 
         public IActionResult DeleteClient(Guid Id)
