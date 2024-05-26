@@ -124,7 +124,6 @@ namespace DataAccessLayer.Repository.Task
                 Description = task.Description,
                 Type = task.Type,
                 Status = task.Status,
-                Expected_Completion = task.Expected_Completion,
                 AssignedTo = task.Project.ProjectUsers.Select(o => new ProjectUserResponse
                 {
                     UserName = o.User.Name,

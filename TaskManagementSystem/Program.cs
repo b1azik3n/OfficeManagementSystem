@@ -7,9 +7,11 @@ using DataAccessLayer.Repository.Task;
 using DataAccessLayer.Repository.UnitOfWork;
 using DomainLayer.Mapping;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Data;
 using System.Text;
 using TaskManagementSystem.Exception1;
 using TaskManagementSystem.MailConfigurations;
@@ -17,6 +19,7 @@ using TaskManagementSystem.Mediators;
 using TaskManagementSystem.Services.Authentication;
 using TaskManagementSystem.Services.Clients;
 using TaskManagementSystem.Services.DailyLogs;
+using TaskManagementSystem.Services.Dashboard;
 using TaskManagementSystem.Services.GeneralService;
 using TaskManagementSystem.Services.Mail;
 using TaskManagementSystem.Services.ProjectAssign;
@@ -37,6 +40,17 @@ namespace TaskManagementSystem
 
 
             builder.Services.AddControllers().AddNewtonsoftJson();
+
+            var configuration = builder.Configuration;
+            var connectionString = configuration.GetConnectionString("DefaultString");
+
+            builder.Services.AddTransient<IDbConnection>((sp) => new SqlConnection(connectionString));
+            builder.Services.AddTransient<IDashboardService, DashboardService>();
+
+
+
+            // Register the IDbConnection as a transient service
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             builder.Services.AddEndpointsApiExplorer();

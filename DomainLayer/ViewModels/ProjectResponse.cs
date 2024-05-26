@@ -11,7 +11,7 @@ namespace DomainLayer.ViewModels
     {
         public string Name { get; set; }
         public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public string EndDate { get; set; } 
         public Enum.TaskStatus Status { get; set; }
         public string ClientName { get; set; }
     }

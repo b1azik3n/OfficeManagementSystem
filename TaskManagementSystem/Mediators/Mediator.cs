@@ -2,12 +2,8 @@
 using DataAccessLayer.Repository.UnitOfWork;
 using DomainLayer.Model;
 using DomainLayer.ViewModels;
-using MailKit;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
 using TaskManagementSystem.MailConfigurations;
-using TaskManagementSystem.Services.GeneralService;
-using TaskManagementSystem.Services.Mail;
 
 namespace TaskManagementSystem.Mediators
 {

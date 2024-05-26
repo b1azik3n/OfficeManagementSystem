@@ -10,7 +10,6 @@ namespace DomainLayer.Model
         public TaskType Type { get; set; }
         public Enum.TaskStatus Status { get; set; }
         public string Description { get; set; }
-        public string Expected_Completion {  get; set; }
         [ForeignKey(nameof(Project))]
         public Guid ProjectId { get; set; } 
         public Project Project { get; set; }
