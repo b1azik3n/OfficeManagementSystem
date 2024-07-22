@@ -8,7 +8,7 @@ namespace DomainLayer.Model
 {
 
 
-    public class Designation : BaseClass
+    public class Designation : BaseDetailed
     {
         public string Name { get; set; }
         public string Description { get; set; }

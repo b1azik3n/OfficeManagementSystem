@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Model
 {
- public class DailyLog:BaseClass
+ public class DailyLog:BaseDetailed
     {      
         public string TaskTitle { get; set; }
         public string Description { get; set; }

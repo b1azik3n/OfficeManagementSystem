@@ -11,7 +11,7 @@ namespace DomainLayer.Model
        
         public Position Position { get; set; }
         
-        public EmployeeStatus Status { get; set; }
+        public Status Status { get; set; }
     
         public string LeftDate { get; set; }
        

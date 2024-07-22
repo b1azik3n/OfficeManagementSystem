@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Model
 {
-    public class TaskUser:BaseClass
+    public class TaskUser:BaseDetailed
     {
         [ForeignKey(nameof(User))]
         public Guid UserId{  get; set; }

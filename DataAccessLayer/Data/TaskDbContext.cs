@@ -26,15 +26,13 @@ namespace DataAccessLayer.Data
         public DbSet<ProjectClient> ProjectClients { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Auditor> Auditors { get; set;}
+        public DbSet<Incident> Incidents { get; set; }
+        public DbSet<Resolver> Resolvers { get; set; }
+        public DbSet<IncidentResolver> IncidentResolvers { get; set; }
+        public DbSet<IncidentAttempt> IncidentAttempts{ get; set; }
+        public DbSet<IncidentTracking> IncidentTrackings { get; set; }
 
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<DailyLog>()
-        //        .HasOne(l => l.User)
-        //        .WithMany(u => u.DailyLogs)
-        //        .HasForeignKey(l => l.UserId);
-        //}
+        
         public override int SaveChanges()
         {
             LogChanges();

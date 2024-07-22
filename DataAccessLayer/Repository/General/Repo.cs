@@ -21,6 +21,7 @@ namespace DataAccessLayer.Repository.General
             context.Set<TModel>().Add(tmodel);
 
         }
+        
 
         public List<TViewModel> GetAll<T,TViewModel>() where T : class
         {
@@ -29,9 +30,9 @@ namespace DataAccessLayer.Repository.General
             return nextquery.ToList();
         }
 
-        public virtual Tmodel GetByID<Tmodel>(Guid id) where Tmodel : BaseClass
+        public virtual Tmodel GetByID<Tmodel>(Guid id) where Tmodel : BaseGuid
         {
-            var project = context.Set<Tmodel>().FirstOrDefault(x => x.Id == id); //solve this name and ID later   
+            var project = context.Set<Tmodel>().FirstOrDefault(x => x.Id == id); 
             if (project == null)
             {
                 return null;
@@ -39,7 +40,7 @@ namespace DataAccessLayer.Repository.General
             return project;
         }
 
-        public bool Remove<Tmodel>(Guid Id) where Tmodel : BaseClass
+        public bool Remove<Tmodel>(Guid Id) where Tmodel : BaseGuid
         {
             
             var del = context.Set<Tmodel>().FirstOrDefault(x => x.Id == Id);
@@ -79,7 +80,7 @@ namespace DataAccessLayer.Repository.General
             }
             return false;
         }
-        public bool IdExist<Tmodel>(Guid Id) where Tmodel : BaseClass
+        public bool IdExist<Tmodel>(Guid Id) where Tmodel : BaseGuid
         {
             if (context.Set<Tmodel>().FirstOrDefault(x => x.Id == Id) != null)
             {
@@ -88,6 +89,10 @@ namespace DataAccessLayer.Repository.General
             }
             return false;
         }
+        //public Guid SendLatestEntryId<Tmodel>(Tmodel tmodel) where Tmodel : BaseClass
+        //{
+        //    var latestId=context.Set<Tmodel>().
 
+        //} 
     }
 }

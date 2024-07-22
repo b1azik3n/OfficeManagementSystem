@@ -32,7 +32,7 @@ namespace TaskManagementSystem.Controllers
             var id=GetUserId();
             if (service.AssignTask(taskUser,id))
             {
-                mediator.NotifyTaskAssignment(taskUser);   
+                mediator.Notify(taskUser);   
                 return Ok("task Assigned"); //kasle k ma kk you can do..
             }
             return BadRequest("MemberNotAssignedToProjectItSeems");
@@ -49,7 +49,7 @@ namespace TaskManagementSystem.Controllers
 
             service.Edit<TaskModel, TaskStatusRequest>(taskStatus,TaskID,GetUserId());
             var updated = service.GetByID<TaskModel,TaskStatusResponse>(TaskID);
-            mediator.NotifyTaskStatusChanges(updated, TaskID);
+            mediator.Notify(TaskID);
 
             return Ok(new { updateddata = updated });
         }

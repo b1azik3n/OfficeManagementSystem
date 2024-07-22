@@ -24,14 +24,14 @@ namespace DataAccessLayer.Repository.ProjectAssignment
             context.ProjectUsers.Add(model);
 
         }
-        public ProjectAssignResponse GetAll(Guid id)
+        public ProjectUserMultipleResponse GetAll(Guid id)
         {
 
-            ProjectAssignResponse projectDetails = context.Projects
+            ProjectUserMultipleResponse projectDetails = context.Projects
                 //.Include(x => x.ProjectUsers)
                 //    .ThenInclude(x => x.User)
                 .Where(x => x.Id == id)
-                .Select(project => new ProjectAssignResponse
+                .Select(project => new ProjectUserMultipleResponse
                 {
                     ProjectName = project.Name,
                     UserDesignation = project.ProjectUsers.Select(member => new ProjectUserResponse

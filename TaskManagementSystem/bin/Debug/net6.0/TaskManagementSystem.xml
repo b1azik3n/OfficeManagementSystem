@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TaskManagementSystem</name>
+    </assembly>
+    <members>
+        <member name="T:TaskManagementSystem.Controllers.ClientController">
+            <summary>
+            Controller for managing clients.
+            </summary>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.#ctor(TaskManagementSystem.Services.Clients.IClientService,Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Logging.ILogger{TaskManagementSystem.Controllers.ClientController})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TaskManagementSystem.Controllers.ClientController"/> class.
+            </summary>
+            <param name="service">The client service.</param>
+            <param name="contextAccessor">The context accessor.</param>
+            <param name="logger">The logger instance.</param>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.CreateClient(DomainLayer.ViewModels.ClientRequest)">
+            <summary>
+            Creates a new client.
+            </summary>
+            <param name="client">The client request object.</param>
+            <returns>HTTP status code indicating the result of the operation.</returns>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.GetAllClients">
+            <summary>
+            Gets all clients.
+            </summary>
+            <returns>A list of all clients.</returns>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.GetParticular(System.Guid)">
+            <summary>
+            Gets a particular client by ID.
+            </summary>
+            <param name="id">The client ID.</param>
+            <returns>The client with the specified ID, if it exists.</returns>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.UpdateClient(DomainLayer.ViewModels.ClientRequest,System.Guid)">
+            <summary>
+            Updates an existing client.
+            </summary>
+            <param name="client">The updated client request object.</param>
+            <param name="ClientId">The ID of the client to update.</param>
+            <returns>HTTP status code indicating the result of the operation, along with the updated client.</returns>
+        </member>
+        <member name="M:TaskManagementSystem.Controllers.ClientController.DeleteClient(System.Guid)">
+            <summary>
+            Deletes a client by ID.
+            </summary>
+            <param name="Id">The ID of the client to delete.</param>
+            <returns>HTTP status code indicating the result of the operation.</returns>
+        </member>
+    </members>
+</doc>

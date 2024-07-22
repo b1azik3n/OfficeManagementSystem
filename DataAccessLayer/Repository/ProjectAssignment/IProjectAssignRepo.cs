@@ -7,7 +7,7 @@ namespace DataAccessLayer.Repository.ProjectAssignment
     public interface IProjectAssignRepo : IRepo
     {
         void AddMember(ProjectSingleUserRequest member);
-        ProjectAssignResponse GetAll(Guid id);
+        ProjectUserMultipleResponse GetAll(Guid id);
 
     }
 }

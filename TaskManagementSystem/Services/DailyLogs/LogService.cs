@@ -17,7 +17,7 @@ namespace TaskManagementSystem.Services.DailyLogs
             this.unit = unit;
         }
 
-        public void AddNew<Tmodel, TViewModel>(TViewModel viewModel, string UserId) where Tmodel : BaseClass
+        public void AddNew<Tmodel, TViewModel>(TViewModel viewModel, string UserId) where Tmodel : BaseDetailed
         {
             var log = mapper.Map<DailyLog>(viewModel);
             log.UserId = Guid.Parse(UserId);

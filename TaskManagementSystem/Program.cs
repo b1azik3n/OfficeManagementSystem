@@ -2,6 +2,7 @@ using AutoMapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Repository.DailyLogs;
 using DataAccessLayer.Repository.General;
+using DataAccessLayer.Repository.Incident;
 using DataAccessLayer.Repository.ProjectAssignment;
 using DataAccessLayer.Repository.Task;
 using DataAccessLayer.Repository.UnitOfWork;
@@ -10,8 +11,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Data;
+using System.Reflection;
 using System.Text;
 using TaskManagementSystem.Exception1;
 using TaskManagementSystem.MailConfigurations;
@@ -21,6 +24,7 @@ using TaskManagementSystem.Services.Clients;
 using TaskManagementSystem.Services.DailyLogs;
 using TaskManagementSystem.Services.Dashboard;
 using TaskManagementSystem.Services.GeneralService;
+using TaskManagementSystem.Services.Incident;
 using TaskManagementSystem.Services.Mail;
 using TaskManagementSystem.Services.ProjectAssign;
 using TaskManagementSystem.Services.Projects;
@@ -54,7 +58,13 @@ namespace TaskManagementSystem
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskAPI", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            }); 
             builder.Services.AddDbContext<TaskDbContext>(options => options.
             UseSqlServer(builder.Configuration.GetConnectionString("DefaultString"),
             b => b.MigrationsAssembly("TaskManagementSystem")));
@@ -89,9 +99,10 @@ namespace TaskManagementSystem
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IClientService, ClientService>();
             builder.Services.AddTransient<IMailService, MailService>();
-            builder.Services.AddScoped<IMediator,Mediator>();
+            builder.Services.AddScoped<IMediator, Mediator>();
+            builder.Services.AddScoped<IIncidentService, IncidentService>();    
+            builder.Services.AddScoped<IIncidentRepo,IncidentRepo>();
 
-            //mail
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 
@@ -108,7 +119,8 @@ namespace TaskManagementSystem
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskAPI v1"));
+            
             }
             app.UseSerilogRequestLogging();
             app.UseMiddleware<GlobalExceptionMiddleware>();

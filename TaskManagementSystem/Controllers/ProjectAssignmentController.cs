@@ -31,7 +31,7 @@ namespace TaskManagementSystem.Controllers
             }
             var id = GetUserId();
             service.AddNew(projectMemberVM, id);
-            mediator.NotifyProjectAssignment(projectMemberVM);
+            mediator.Notify(projectMemberVM);
 
             return Ok("AddedMemberToProject");
 
@@ -42,7 +42,7 @@ namespace TaskManagementSystem.Controllers
             if(service.CheckIfIdExists<Project>(ProjectId))
             {
 
-                ProjectAssignResponse details = service.ViewMembers(ProjectId);
+                ProjectUserMultipleResponse details = service.ViewMembers(ProjectId);
                 return Ok(details);
             }
             return BadRequest();

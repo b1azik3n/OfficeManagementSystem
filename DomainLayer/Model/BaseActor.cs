@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Model
 {
-    public abstract class BaseActor:BaseClass
+    public abstract class BaseActor:BaseDetailed        
     {
         [Required]
         public string Name { get; set; } 

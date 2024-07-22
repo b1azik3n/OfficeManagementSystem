@@ -223,6 +223,117 @@ namespace TaskManagementSystem.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("DomainLayer.Model.Incident", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSolved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReportedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReportedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Incidents");
+                });
+
+            modelBuilder.Entity("DomainLayer.Model.IncidentResolver", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<DateTime>("AssignedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResolverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IncidentId");
+
+                    b.HasIndex("ResolverId");
+
+                    b.ToTable("IncidentResolvers");
+                });
+
+            modelBuilder.Entity("DomainLayer.Model.IncidentResolvingHistory", b =>
+                {
+                    b.Property<string>("ApproximateTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttemptMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Attempt_Number")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("AttemptedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.ToTable("IncidentResolvingHistories");
+                });
+
+            modelBuilder.Entity("DomainLayer.Model.IncidentTracking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("AttemptNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("IncidentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Succeeded")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IncidentTrackings");
+                });
+
             modelBuilder.Entity("DomainLayer.Model.Project", b =>
                 {
                     b.Property<Guid>("Id")
@@ -342,6 +453,41 @@ namespace TaskManagementSystem.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ProjectUsers");
+                });
+
+            modelBuilder.Entity("DomainLayer.Model.Resolver", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("ActiveCases")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Resolvers");
                 });
 
             modelBuilder.Entity("DomainLayer.Model.TaskModel", b =>
@@ -479,6 +625,25 @@ namespace TaskManagementSystem.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DomainLayer.Model.IncidentResolver", b =>
+                {
+                    b.HasOne("DomainLayer.Model.Incident", "Incident")
+                        .WithMany()
+                        .HasForeignKey("IncidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainLayer.Model.Resolver", "Resolver")
+                        .WithMany()
+                        .HasForeignKey("ResolverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Incident");
+
+                    b.Navigation("Resolver");
+                });
+
             modelBuilder.Entity("DomainLayer.Model.Project", b =>
                 {
                     b.HasOne("DomainLayer.Model.Client", "Client")
@@ -513,6 +678,17 @@ namespace TaskManagementSystem.Migrations
                     b.Navigation("Designation");
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DomainLayer.Model.Resolver", b =>
+                {
+                    b.HasOne("DomainLayer.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

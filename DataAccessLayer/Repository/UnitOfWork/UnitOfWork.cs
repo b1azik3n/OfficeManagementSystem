@@ -3,6 +3,7 @@ using DataAccessLayer.Data;
 using DataAccessLayer.Repository.Authentication;
 using DataAccessLayer.Repository.DailyLogs;
 using DataAccessLayer.Repository.General;
+using DataAccessLayer.Repository.Incident;
 using DataAccessLayer.Repository.ProjectAssignment;
 using DataAccessLayer.Repository.Projects;
 using DataAccessLayer.Repository.Task;
@@ -22,6 +23,7 @@ namespace DataAccessLayer.Repository.UnitOfWork
             Repo= new Repo(context,mapper);
             ProjectAssignRepo = new ProjectAssignRepo(context,mapper);
             TaskRepo=new TaskRepo(context,mapper);
+            IncidentRepo=new IncidentRepo(context,mapper);
 
         }
 
@@ -31,7 +33,7 @@ namespace DataAccessLayer.Repository.UnitOfWork
         public IRepo Repo { get; set; }
         public IProjectAssignRepo ProjectAssignRepo { get; set; }
         public ITaskRepo TaskRepo { get; set; }
-        //public TaskRepo TaskRepo { get; }
+        public IIncidentRepo IncidentRepo { get; set; }
 
 
         public void SaveChanges()

@@ -20,7 +20,7 @@ namespace TaskManagementSystem.Services.ProjectAssign
        
 
 
-        public ProjectAssignResponse ViewMembers(Guid Id)
+        public ProjectUserMultipleResponse ViewMembers(Guid Id)
         {
             var data = unit.ProjectAssignRepo.GetAll(Id);
             return data;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DomainLayer.Model
 {
-    public class ProjectClient: BaseClass
+    public class ProjectClient: BaseDetailed
     {
         public Guid ProjectId { get; set; } 
         public Guid ClientId { get; set; }

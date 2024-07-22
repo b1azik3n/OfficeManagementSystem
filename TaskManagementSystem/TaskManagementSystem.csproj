@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <DocumentationFile>E:\TaskManagementSystem\TaskManagementSystem\bin\Debug\net6.0\TaskManagementSystem.xml</DocumentationFile>
+
   </PropertyGroup>
 
   <ItemGroup>

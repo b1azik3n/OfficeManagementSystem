@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DomainLayer.Model;
 using DomainLayer.ViewModels;
+using System.Xml.Serialization;
 
 namespace DomainLayer.Mapping
 {
@@ -8,7 +9,8 @@ namespace DomainLayer.Mapping
     {
         public AutoMapping()
         {
-            CreateMap<User,UserRequest>().ReverseMap();
+            CreateMap<User, UserRequest>().ReverseMap();
+                
             CreateMap<UserLogin, UserLoginRequest>().ReverseMap();
             CreateMap<DailyLog, DailyLogRequest>().ReverseMap();
             CreateMap<Project, ProjectRequest>().ReverseMap();
@@ -25,8 +27,13 @@ namespace DomainLayer.Mapping
             CreateMap<TaskModel,TaskStatusRequest>().ReverseMap();
             CreateMap<TaskModel,TaskStatusResponse>().ReverseMap();
             CreateMap<EmployeeRequest,Employee>().ReverseMap();
-            CreateMap<Auditor, AuditorRequest>().ReverseMap();
+            CreateMap<Auditor, AuditorVM>().ReverseMap();
             CreateMap<MailData,MailDataRequest>().ReverseMap();
+            CreateMap<Resolver,ResolverRequest>().ReverseMap();
+            CreateMap<Resolver,ResolverResponse>().ReverseMap();
+            CreateMap<Incident, IncidentRequest>().ReverseMap();    
+            CreateMap<IncidentAttempt,IncidentResolvingHistoryRequest>().ReverseMap();
+           
         }
     }
 }

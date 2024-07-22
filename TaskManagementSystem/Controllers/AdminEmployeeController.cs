@@ -1,5 +1,6 @@
 ﻿using DomainLayer.Model;
 using DomainLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TaskManagementSystem.Constants.AdminEmployee;
@@ -9,6 +10,8 @@ namespace TaskManagementSystem.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+
+    //AuthorizationOnlyForAdmin
     public class AdminEmployeeController : BaseController
     {
         private readonly IService service;

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainLayer.Model
 {
-    public class TaskModel:BaseClass
+    public class TaskModel:BaseDetailed
     {
 
         public string Name { get; set; }

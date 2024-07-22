@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace DomainLayer.Model
 {
-    public class ProjectUser:BaseClass
+    public class ProjectUser:BaseDetailed
     {
 
         [ForeignKey(nameof(Project))]

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DomainLayer.Model
 {
-    public class Project:BaseClass
+    public class Project:BaseDetailed
     {
         [Required]
         [StringLength(200)]

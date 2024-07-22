@@ -25,13 +25,24 @@ namespace TaskManagementSystem.Services.Authentication
             return temp;
 
         }
-        public bool RegisterUser(UserRequest user)
+        public bool RegisterUser(UserRequest user, Guid UserId)
         {
 
             var temp=mapper.Map<User>(user);
-            unitOfWork.AuthRepo.Add(temp);
+            var employee = unitOfWork.Repo.GetByID<Employee>(Guid.Parse(user.OrgID));
+            temp.Name = employee.Name;
+            temp.PhoneNumber= employee.PhoneNumber;
+            temp.CreatedBy= UserId;
+            unitOfWork.Repo.Add<User>(temp);
+
             unitOfWork.SaveChanges();
             return true;           
         }
+        public override void AddNew<Tmodel, TViewModel>(TViewModel viewModel, Guid Id) where Tmodel: class
+        {
+
+        }
+
+        
     }
 }

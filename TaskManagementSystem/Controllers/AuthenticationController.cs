@@ -92,7 +92,7 @@ namespace TaskManagementSystem.Controllers
                 return BadRequest("PhoneNumberAlreadyExists!");
             }
 
-            service.AddNew<User, UserRequest>(user, GetUserId());
+            service.RegisterUser(user,GetUserId());
             return Ok();
 
 

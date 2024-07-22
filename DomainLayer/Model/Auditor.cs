@@ -1,6 +1,6 @@
 ﻿namespace DomainLayer.Model
 {
-    public class Auditor : BaseClass
+    public class Auditor : BaseDetailed
     {
         public string Name { get; set; }    
     }

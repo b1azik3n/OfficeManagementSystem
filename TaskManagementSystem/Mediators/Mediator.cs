@@ -3,76 +3,99 @@ using DataAccessLayer.Repository.UnitOfWork;
 using DomainLayer.Model;
 using DomainLayer.ViewModels;
 using Microsoft.Extensions.Options;
+using TaskManagementSystem.Delegates.Publisher;
+using TaskManagementSystem.Delegates.Subscribers;
 using TaskManagementSystem.MailConfigurations;
 
 namespace TaskManagementSystem.Mediators
 {
     public class Mediator : Services.Mail.MailService, IMediator
     {
+        private readonly IOptions<MailSettings> mailSettingsOptions;
+        private readonly IMapper mapper;
+        private readonly IUnitOfWork unit;
+
         public Mediator(IOptions<MailSettings> mailSettingsOptions, IMapper mapper, IUnitOfWork unit) : base(mailSettingsOptions, mapper, unit)
         {
+            this.mailSettingsOptions = mailSettingsOptions;
+            this.mapper = mapper;
+            this.unit = unit;
         }
 
-        public void NotifyProjectAssignment(ProjectMultipleUserRequest request)
+        //for Projectassignment
+
+        public void Notify(ProjectMultipleUserRequest request)
         {
+            //Initailizing Publishers and Subscribers
+
+            var projectassign = new ProjectAssignmentMail(mailSettingsOptions,mapper,unit);
+            var newAssignmentToLeadMail = new NewAssignmentToLeadMail(mailSettingsOptions,mapper,unit);
+            var publishermail = new PublisherMail();
+            //subscribing to publisher
+            publishermail.CriticalChanges += newAssignmentToLeadMail.OnCriticalChanges;  //Lead
+            publishermail.CriticalChanges += projectassign.OnCriticalChanges; //ProjectMember
+
             foreach (var Id in request.UserAndDesignation)
             {
-                var user = GetByID<User, UserRequest>(Id.UserId);
-                var project = GetByID<Project, ProjectRequest>(request.ProjectId);
+                var user = GetByID<User, UserResponse>(Id.UserId);
+                var project = GetByID<Project, ProjectResponse>(request.ProjectId);
                 var designation = GetByID<Designation, DesignationRequest>(Id.DesignationId);
-                if (user != null)
+                var sendforNotification = new CommonNotification
                 {
-                    var maildata = new MailDataRequest
-                    {
-                        EmailBody = $"Hello {user.Name}! " +
-                        $"You're assigned to Project {project.Name} as {designation.Name}",
-                        EmailSubject = "ProjectAssignment",
-                        EmailToId = $"{user.Email}",
-                        EmailToName = $"{user.Name}",
-
-                    };
-                    SendMail(maildata);
-                }
+                    UserName = user.Name,
+                    ProjectName = project.Name,
+                    Designation = designation.Name,
+                    EmailAddress=user.Email,
+                    
+                };
+                
+                publishermail.SendNotification(sendforNotification);
 
             }
-
-
         }
+        //For TaskAssignment
 
-        public void NotifyTaskAssignment(TaskUserRequest taskUser)
+        public void Notify(TaskUserRequest request)
         {
-            var user=GetByID<User,UserRequest>(taskUser.UserId);
-            var task = GetByID<TaskModel,TaskRequest>(taskUser.TaskId);
-            var maildata = new MailDataRequest
+
+            var taskAssignmentMail= new TaskAssignmentMail(mailSettingsOptions, mapper, unit);
+            var publishermail = new PublisherMail();
+
+            publishermail.CriticalChanges += taskAssignmentMail.OnCriticalChanges;
+
+            var user = GetByID<User, UserResponse>(request.UserId);
+            var task = GetByID<TaskModel, TaskRequest>(request.TaskId);
+            var sendforNotification = new CommonNotification
             {
-                EmailBody = $"Hello {user.Name}! " +
-                        $"You're assigned to Task: {task.Name} ",
-                EmailSubject = "TaskAssignment",
-                EmailToId = $"{user.Email}",
-                EmailToName = $"{user.Name}",
-
+                UserName = user.Name,
+                TaskName= task.Name,
+                EmailAddress=user.Email
             };
-            SendMail(maildata);
-
+            publishermail.SendNotification(sendforNotification);
         }
 
-        public void NotifyTaskStatusChanges(TaskStatusResponse response, Guid TaskId)
+        //For TaskStatusChanges
+        public void Notify( Guid TaskId)
         {
-            var task=GetByID<TaskModel,TaskRequest>(TaskId);
-            var project= GetByID<Project, ProjectRequest>(task.ProjectId);
-            var user= GetByID<User,UserRequest>(project.TeamLeadId);
-            var maildata = new MailDataRequest
-            {
-                EmailBody = $"Hello {user.Name}! " +
-                        $"TaskName: {task.Name} "+$"Status: {task.Status.ToString()}" ,
-                EmailSubject = "TaskStatusUpdate",
-                EmailToId = $"{user.Email}",
-                EmailToName = $"{user.Name}",
+            var taskStatusChangesMail = new TaskStatusChangesMail(mailSettingsOptions, mapper, unit);
+            var publishermail = new PublisherMail();
+            
+            publishermail.CriticalChanges += taskStatusChangesMail.OnCriticalChanges;
 
+            var task = GetByID<TaskModel, TaskRequest>(TaskId);
+            var project = GetByID<Project, ProjectRequest>(task.ProjectId);
+            var user = GetByID<User, UserResponse>(project.TeamLeadId);
+            var sendforNotification = new CommonNotification
+            {
+                UserName = user.Name,
+                TaskName = task.Name,
+                EmailAddress = user.Email,
+                TaskStatusName=task.Status.ToString(),
             };
-            SendMail(maildata);
+            publishermail.SendNotification(sendforNotification);
 
 
         }
+
     }
 }

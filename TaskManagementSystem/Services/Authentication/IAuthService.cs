@@ -7,6 +7,6 @@ namespace TaskManagementSystem.Services.Authentication
     public interface IAuthService: IService
     {
         User FindUser(UserLoginRequest user);
-        bool RegisterUser(UserRequest user);
+        bool RegisterUser(UserRequest user, Guid UserId);
     }
 }

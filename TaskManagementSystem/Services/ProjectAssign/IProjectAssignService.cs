@@ -7,7 +7,7 @@ namespace TaskManagementSystem.Services.ProjectAssign
     public interface IProjectAssignService : IService
     {
         //void AddMember(ProjectUserRequest member);
-        ProjectAssignResponse ViewMembers(Guid Id);
+        ProjectUserMultipleResponse ViewMembers(Guid Id);
         void AddNew(ProjectMultipleUserRequest request, Guid Id);
 
 

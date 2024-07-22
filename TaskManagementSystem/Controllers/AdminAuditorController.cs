@@ -19,34 +19,34 @@ namespace TaskManagementSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] AuditorRequest request)
+        public IActionResult Add([FromBody] AuditorVM request)
         {
             if (!ModelState.IsValid)
             {
                 var message = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
                 return new BadRequestObjectResult(message);
             }
-            service.AddNew<Auditor, AuditorRequest>(request, GetUserId());
+            service.AddNew<Auditor, AuditorVM>(request, GetUserId());
             return Ok("Created");
 
         }
         [HttpPut]
-        public IActionResult Edit([FromBody] AuditorRequest request, Guid AuditorId)
+        public IActionResult Edit([FromBody] AuditorVM request, Guid AuditorId)
         {
-            service.Edit<Auditor, AuditorRequest>(request, AuditorId, GetUserId());
-            var updated = service.GetByID<Auditor, AuditorRequest>(AuditorId);
+            service.Edit<Auditor, AuditorVM>(request, AuditorId, GetUserId());
+            var updated = service.GetByID<Auditor, AuditorVM>(AuditorId);
             return Ok(new { message = "Updated", updated });
         }
         [HttpDelete]
         public IActionResult Delete(Guid AuditorId)
         {
-            service.Remove<Auditor, AuditorRequest>(AuditorId);
+            service.Remove<Auditor, AuditorVM>(AuditorId);
             return Ok();
         }
         [HttpGet]
         public IActionResult Get()
         {
-            var req = service.GetAll<Auditor, AuditorRequest>();
+            var req = service.GetAll<Auditor, AuditorVM>();
             return Ok(req);
         }
     }
